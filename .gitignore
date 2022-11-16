@@ -1,1 +1,8 @@
+# vscode project settings
+.vscode
+
+# test programs and files
 *test*
+
+# object file
+*.o
