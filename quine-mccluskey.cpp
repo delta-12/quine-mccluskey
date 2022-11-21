@@ -82,11 +82,11 @@ int main(int argc, char **argv)
         algo(mintermGroups, uncombinedTerms);
 
         // Display result as SOP
-        std::cout << "f = ";
-        for (unsigned int i = 0; i < uncombinedTerms.size(); i++)
+        std::cout << "fxn = ";
+        for (unsigned int i = uncombinedTerms.size(); i > 0; i--)
         {
-            uncombinedTerms[i].printTerm();
-            if (i + 1 != uncombinedTerms.size())
+            uncombinedTerms[i - 1].printTerm(fh.getVariables());
+            if (i - 1 != 0)
             {
                 std::cout << " + ";
             }

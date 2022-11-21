@@ -27,6 +27,7 @@ public:
     bool getCombined() const;
     void setCombined(bool);
     void printTerm() const;
+    void printTerm(std::vector<char>) const;
 };
 
 // Class to store minterms with same number of ones present
