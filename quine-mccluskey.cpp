@@ -1,7 +1,5 @@
 #include "Minterms.h"
-
-#define SIZE 10
-#define BITS 4
+#include "FileHandler.h"
 
 void algo(std::vector<MintermGroup> mintermGroups, std::vector<Minterm> &uncombinedTerms)
 {
@@ -53,40 +51,48 @@ void algo(std::vector<MintermGroup> mintermGroups, std::vector<Minterm> &uncombi
     }
 }
 
-int main()
+int main(int argc, char **argv)
 {
-    unsigned int minterms[SIZE] = {0, 1, 2, 5, 6, 7, 8, 9, 10, 14};
-    std::vector<MintermGroup> mintermGroups;
-    std::vector<Minterm> uncombinedTerms;
+    FileHandler fh(argv[1]);
+    const unsigned int bits = fh.variablesSize();
 
-    // Create groups for each possible numbers of ones present in a term
-    for (unsigned int i = 0; i <= BITS; i++)
+    std::vector<std::vector<unsigned int>> inMinterms = fh.getMinterms();
+    for (unsigned int i = 0; i < inMinterms.size(); i++)
     {
-        mintermGroups.insert(mintermGroups.end(), MintermGroup(i, BITS));
-    }
+        std::vector<unsigned int> minterms = inMinterms[i];
+        std::size_t size = minterms.size();
+        std::vector<MintermGroup> mintermGroups;
+        std::vector<Minterm> uncombinedTerms;
 
-    // Sort minterms into groups correspoding to number of ones present
-    for (unsigned int i = 0; i < SIZE; i++)
-    {
-        unsigned int n = minterms[i];
-        Minterm minterm(n, BITS);
-        mintermGroups[minterm.getOnes()].addTerm(minterm);
-    }
-
-    // Run algorithm
-    algo(mintermGroups, uncombinedTerms);
-
-    // Display result as SOP
-    std::cout << "f = ";
-    for (unsigned int i = 0; i < uncombinedTerms.size(); i++)
-    {
-        uncombinedTerms[i].printTerm();
-        if (i + 1 != uncombinedTerms.size())
+        // Create groups for each possible numbers of ones present in a term
+        for (unsigned int i = 0; i <= bits; i++)
         {
-            std::cout << " + ";
+            mintermGroups.insert(mintermGroups.end(), MintermGroup(i, bits));
         }
+
+        // Sort minterms into groups correspoding to number of ones present
+        for (unsigned int i = 0; i < size; i++)
+        {
+            unsigned int n = minterms[i];
+            Minterm minterm(n, bits);
+            mintermGroups[minterm.getOnes()].addTerm(minterm);
+        }
+
+        // Run algorithm
+        algo(mintermGroups, uncombinedTerms);
+
+        // Display result as SOP
+        std::cout << "f = ";
+        for (unsigned int i = 0; i < uncombinedTerms.size(); i++)
+        {
+            uncombinedTerms[i].printTerm();
+            if (i + 1 != uncombinedTerms.size())
+            {
+                std::cout << " + ";
+            }
+        }
+        std::cout << std::endl;
     }
-    std::cout << std::endl;
 
     return 0;
 }

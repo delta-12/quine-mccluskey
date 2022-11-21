@@ -3,6 +3,7 @@
 
 # test programs and files
 *test*
+*.txt
 
 # object file
 *.o
