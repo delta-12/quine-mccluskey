@@ -9,6 +9,7 @@ FileReader::FileReader(std::string filename)
     readFile(filename);
 }
 
+// Read in variables and minterm numbers from file
 bool FileReader::readFile(std::string filename)
 {
     std::ifstream inFile(filename);
@@ -27,9 +28,9 @@ bool FileReader::readFile(std::string filename)
     }
     inFile.close();
 
-    // Get variables from first line of file
     if (lines.size() > 0)
     {
+        // Get variables from first line of file
         std::string varLine = lines[0];
         unsigned int pos = varLine.find(',');
         while (pos < varLine.length())
@@ -117,13 +118,28 @@ void FileWriter::setFilename(std::string name)
     filename = name;
 }
 
-void FileWriter::write(std::vector<Minterm> minterms, std::vector<char> variables)
+// Write function to file as SOP
+void FileWriter::write(std::vector<Minterm> minterms, std::vector<char> variables, std::string function)
 {
+    // Check output file is open before writing
     if (!outFile.is_open())
     {
         outFile.open(filename);
     }
-    outFile << "fxn = ";
+
+    // Show as function of variables, e.g. fxn(a,b,c,d) = ...
+    outFile << function << "(";
+    for (unsigned int i = 0; i < variables.size(); i++)
+    {
+        outFile << variables[i];
+        if (i + 1 != variables.size())
+        {
+            outFile << ",";
+        }
+    }
+    outFile << ") = ";
+
+    // SOP expression, e.b. AB + A'D' + BCD + ...
     for (unsigned int i = minterms.size(); i > 0; i--)
     {
         minterms[i - 1].printTerm(variables, outFile);

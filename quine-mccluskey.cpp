@@ -17,12 +17,14 @@ void algo(std::vector<MintermGroup> mintermGroups, std::vector<Minterm> &uncombi
             combine = true;
         }
     }
+
     // Add terms not combined in this step to uncombinedTerms vector
     for (unsigned int i = 0; i < mintermGroups.size(); i++)
     {
         std::vector<Minterm> terms = mintermGroups[i].uncombinedTerms().getTerms();
         uncombinedTerms.insert(uncombinedTerms.end(), terms.begin(), terms.end());
     }
+
     // Recursively call function if terms were combined
     if (combine)
     {
@@ -53,10 +55,20 @@ void algo(std::vector<MintermGroup> mintermGroups, std::vector<Minterm> &uncombi
 
 int main(int argc, char **argv)
 {
+    // Read in file from command line argument
+    if (argv[1] == nullptr)
+    {
+        std::cout << "No input file" << std::endl;
+        return 0;
+    }
     FileReader reader(argv[1]);
-    const unsigned int bits = reader.variablesSize();
+    FileWriter writer("quine-mccluskey_" + std::string(argv[1]));
 
+    // Get variables and minterm numbers from input file
+    const unsigned int bits = reader.variablesSize();
     std::vector<std::vector<unsigned int>> inMinterms = reader.getMinterms();
+
+    // Run algorithm for each line of minterm numbers
     for (unsigned int i = 0; i < inMinterms.size(); i++)
     {
         std::vector<unsigned int> minterms = inMinterms[i];
@@ -83,21 +95,10 @@ int main(int argc, char **argv)
 
         // Write result to file
         std::string outputFxn = "fxn_" + std::to_string(i);
-        FileWriter writer(uncombinedTerms, reader.getVariables(), outputFxn + "_output.txt");
-        writer.close();
-
-        // Display result as SOP
-        std::cout << outputFxn << " = ";
-        for (unsigned int i = uncombinedTerms.size(); i > 0; i--)
-        {
-            uncombinedTerms[i - 1].printTerm(reader.getVariables());
-            if (i - 1 != 0)
-            {
-                std::cout << " + ";
-            }
-        }
-        std::cout << std::endl;
+        writer.write(uncombinedTerms, reader.getVariables(), outputFxn);
     }
+
+    writer.close();
 
     return 0;
 }

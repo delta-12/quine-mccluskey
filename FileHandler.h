@@ -33,7 +33,7 @@ public:
     FileWriter(std::vector<Minterm>, std::vector<char>, std::string filename = "fxn_output.txt");
     ~FileWriter();
     void setFilename(std::string);
-    void write(std::vector<Minterm>, std::vector<char>);
+    void write(std::vector<Minterm>, std::vector<char>, std::string function = "fxn");
     void close();
 };
 
