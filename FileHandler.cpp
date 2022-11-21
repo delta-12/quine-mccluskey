@@ -1,11 +1,15 @@
 #include "FileHandler.h"
 
-FileHandler::FileHandler(std::string filename)
+/*==========================================================================================================*/
+/* FileReader Function Definitions */
+/*==========================================================================================================*/
+
+FileReader::FileReader(std::string filename)
 {
     readFile(filename);
 }
 
-bool FileHandler::readFile(std::string filename)
+bool FileReader::readFile(std::string filename)
 {
     std::ifstream inFile(filename);
     if (inFile.fail())
@@ -61,27 +65,82 @@ bool FileHandler::readFile(std::string filename)
     return true;
 }
 
-std::size_t FileHandler::linesSize() const
+std::size_t FileReader::linesSize() const
 {
     return lines.size();
 }
 
-size_t FileHandler::variablesSize() const
+size_t FileReader::variablesSize() const
 {
     return variables.size();
 }
 
-size_t FileHandler::mintermsSize() const
+size_t FileReader::mintermsSize() const
 {
     return minterms.size();
 }
 
-std::vector<char> FileHandler::getVariables() const
+std::vector<char> FileReader::getVariables() const
 {
     return variables;
 }
 
-std::vector<std::vector<unsigned int>> FileHandler::getMinterms() const
+std::vector<std::vector<unsigned int>> FileReader::getMinterms() const
 {
     return minterms;
 }
+
+/*==========================================================================================================*/
+
+/*==========================================================================================================*/
+/* FileWriter Function Definitions */
+/*==========================================================================================================*/
+
+FileWriter::FileWriter(std::string filename)
+{
+    setFilename(filename);
+}
+
+FileWriter::FileWriter(std::vector<Minterm> minterms, std::vector<char> variables, std::string filename)
+{
+    setFilename(filename);
+    write(minterms, variables);
+}
+
+FileWriter::~FileWriter()
+{
+    close();
+}
+
+void FileWriter::setFilename(std::string name)
+{
+    filename = name;
+}
+
+void FileWriter::write(std::vector<Minterm> minterms, std::vector<char> variables)
+{
+    if (!outFile.is_open())
+    {
+        outFile.open(filename);
+    }
+    outFile << "fxn = ";
+    for (unsigned int i = minterms.size(); i > 0; i--)
+    {
+        minterms[i - 1].printTerm(variables, outFile);
+        if (i - 1 != 0)
+        {
+            outFile << " + ";
+        }
+    }
+    outFile << std::endl;
+}
+
+void FileWriter::close()
+{
+    if (outFile.is_open())
+    {
+        outFile.close();
+    }
+}
+
+/*==========================================================================================================*/

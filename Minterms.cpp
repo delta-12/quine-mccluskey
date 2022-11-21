@@ -140,7 +140,7 @@ void Minterm::printTerm() const
     }
 }
 
-// Print term with variables MSB first
+// Print term MSB first with variables
 void Minterm::printTerm(std::vector<char> variables) const
 {
     if (variables.size() != bitCount)
@@ -158,6 +158,28 @@ void Minterm::printTerm(std::vector<char> variables) const
         if (bit == 0x00)
         {
             std::cout << "'";
+        }
+    }
+}
+
+// Print term MSB first with variables to file
+void Minterm::printTerm(std::vector<char> variables, std::ofstream &outFile) const
+{
+    if (variables.size() != bitCount)
+    {
+        std::cout << "Mismatch variables and minterm size!" << std::endl;
+        return;
+    }
+    for (unsigned int i = bits.size(); i > 0; i--)
+    {
+        unsigned char bit = bits[i - 1];
+        if (bit != 0xff)
+        {
+            outFile << variables[bitCount - i];
+        }
+        if (bit == 0x00)
+        {
+            outFile << "'";
         }
     }
 }

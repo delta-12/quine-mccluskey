@@ -1,6 +1,7 @@
 #ifndef __MINTERMS_H__
 #define __MINTERMS_H__
 
+#include <fstream>
 #include <iostream>
 #include <vector>
 
@@ -28,6 +29,7 @@ public:
     void setCombined(bool);
     void printTerm() const;
     void printTerm(std::vector<char>) const;
+    void printTerm(std::vector<char>, std::ofstream &) const;
 };
 
 // Class to store minterms with same number of ones present

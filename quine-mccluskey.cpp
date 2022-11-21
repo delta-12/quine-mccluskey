@@ -53,10 +53,10 @@ void algo(std::vector<MintermGroup> mintermGroups, std::vector<Minterm> &uncombi
 
 int main(int argc, char **argv)
 {
-    FileHandler fh(argv[1]);
-    const unsigned int bits = fh.variablesSize();
+    FileReader reader(argv[1]);
+    const unsigned int bits = reader.variablesSize();
 
-    std::vector<std::vector<unsigned int>> inMinterms = fh.getMinterms();
+    std::vector<std::vector<unsigned int>> inMinterms = reader.getMinterms();
     for (unsigned int i = 0; i < inMinterms.size(); i++)
     {
         std::vector<unsigned int> minterms = inMinterms[i];
@@ -81,11 +81,16 @@ int main(int argc, char **argv)
         // Run algorithm
         algo(mintermGroups, uncombinedTerms);
 
+        // Write result to file
+        std::string outputFxn = "fxn_" + std::to_string(i);
+        FileWriter writer(uncombinedTerms, reader.getVariables(), outputFxn + "_output.txt");
+        writer.close();
+
         // Display result as SOP
-        std::cout << "fxn = ";
+        std::cout << outputFxn << " = ";
         for (unsigned int i = uncombinedTerms.size(); i > 0; i--)
         {
-            uncombinedTerms[i - 1].printTerm(fh.getVariables());
+            uncombinedTerms[i - 1].printTerm(reader.getVariables());
             if (i - 1 != 0)
             {
                 std::cout << " + ";
