@@ -4,6 +4,8 @@
 # test programs and files
 *test*
 *.txt
+*.zip
+quine-mccluskey
 
 # object file
 *.o
