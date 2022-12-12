@@ -71,7 +71,7 @@ Minterm *Minterm::operator+(Minterm minterm) const
         return nullptr;
     }
 
-    // Find difference in bits and replace with 0ff
+    // Find difference in bits and replace with 0xff
     std::vector<unsigned char> combinedBits;
     unsigned int diff = 0; // count difference between corresponding bits
     for (unsigned int i = 0; i < bitCount; i++)

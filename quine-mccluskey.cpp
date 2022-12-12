@@ -1,7 +1,7 @@
 #include "Minterms.h"
 #include "FileHandler.h"
 
-void algo(std::vector<MintermGroup> mintermGroups, std::vector<Minterm> &uncombinedTerms)
+void combineTerms(std::vector<MintermGroup> mintermGroups, std::vector<Minterm> &uncombinedTerms)
 {
     // Combine terms in adjacent groups
     bool combine = false;
@@ -28,7 +28,7 @@ void algo(std::vector<MintermGroup> mintermGroups, std::vector<Minterm> &uncombi
     // Recursively call function if terms were combined
     if (combine)
     {
-        algo(combinedGroups, uncombinedTerms);
+        combineTerms(combinedGroups, uncombinedTerms);
     }
     // Remove duplicate terms
     else
@@ -76,7 +76,7 @@ int main(int argc, char **argv)
         std::vector<MintermGroup> mintermGroups;
         std::vector<Minterm> uncombinedTerms;
 
-        // Create groups for each possible numbers of ones present in a term
+        // Create groups for each possible number of ones present in a term
         for (unsigned int i = 0; i <= bits; i++)
         {
             mintermGroups.insert(mintermGroups.end(), MintermGroup(i, bits));
@@ -90,8 +90,8 @@ int main(int argc, char **argv)
             mintermGroups[minterm.getOnes()].addTerm(minterm);
         }
 
-        // Run algorithm
-        algo(mintermGroups, uncombinedTerms);
+        // Run algorithm to combine terms
+        combineTerms(mintermGroups, uncombinedTerms);
 
         // Write result to file
         std::string outputFxn = "fxn_" + std::to_string(i);
