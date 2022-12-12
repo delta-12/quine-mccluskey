@@ -60,8 +60,8 @@ Here is a test case calculated by hand compared with the result from the running
 ```
 Minterms
 --------
-n   a   b   c   d   e   f
--   -   -   -   -   -   -
+n	a	b	c	d	e	f
+-	-	-	-	-	-	-
 1	0	0	0	0	0	1
 6	0	0	0	1	1	0
 12	0	0	1	1	0	0
